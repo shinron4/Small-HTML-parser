@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+	<title>Faculty Info</title>
+
+	</head>
+
+	<body>
+
+ 		<h1 style = "text-align:center;">Page for Querying the Faculty Details</h1>
+ 		<h4> Query Sent to the Server </h4>
+ 		<p id = "query"> </p>
+		<div align="center" style = "height:500px;width:1500px;">
+			<div style = "position:absolute;height:900px;width:700px;">
+				<h2 style = "text-align:center;">Query</h3>
+				<table>
+					<tr>
+						<th width = "5%"><th width="35%"></th><th width="50%"></th><th width="10%"></th>
+					<tr>
+						<td colspan = "4"><h4 style="text-align:center;">Resposibilities</h4></td>
+					</tr>
+  					<tr>
+				    	<td> 
+				    		1.
+				    	</td>
+				    	<td>
+				    		Responsibility :
+				    	</td>
+				    	<td>
+				    		<input type = "text" id = "res"/>
+				    	</td>
+				    	<td>
+				    		<button type="button" id = "resquery" onclick = "getres();">Query</button>
+				    	</td>
+				    </tr>
+					<tr>
+						<td colspan = "4"><h4 style="text-align:center;">Awards and Accolades</h4></td>
+					</tr>
+					<tr>
+				    	<td>
+				    		 2.
+				    	</td>
+				    	<td>
+				    		Award :
+				    	</td>
+				    	<td>
+				    		<input type = "text" id = "awa"/>
+				    	</td>
+				    	<td>
+				    		<button type="button" id = "awaquery" onclick = "getawa()">Query</button>
+				    	</td>
+				    </tr>
+					<tr>
+						<td colspan = "4"><h4 style="text-align:center;">Publications</h4></td>
+					</tr>
+					<tr>
+				    	<td> 
+				    		3.
+				    	</td>
+				    	<td>
+				    		Faculty :
+				    		<br>
+				    		Year :
+				    	</td>
+				    	<td>
+				    		<input type = "text" id = "pubname"/>
+				    		<br>
+				    		<select name="year" id="pubyear">
+  								   <script>
+  											var myDate = new Date();
+  											var year = myDate.getFullYear();
+  											for(var i = 1900; i < year+1; i++){
+	  											document.write('<option value="'+i+'">'+i+'</option>');
+  											}
+  									</script>
+									</select>
+						</td>
+						<td>	
+				    		<button type="button" id = "pubquery" onclick = "getpub()">Query</button>
+				    	</td>
+				    </tr>
+					<tr>
+						<td colspan = "4"><h4 style="text-align:center;">Maximum Ph.D. Students</h4></td>
+					</tr>
+					<tr>
+						<td colspan = "3">
+							4.
+						</td>
+				    	<td>
+				    		<button type="button" id = "maxphdquery" onclick = "maxphd()">Query</button>
+				    	</td>
+				    </tr>
+					<tr>
+						<td colspan = "4"><h4 style="text-align:center;">Maximum Publications</h4></td>
+					</tr>
+					<tr>
+						<td>
+							5.
+						</td>
+				    	<td>
+				    		Year :
+				    	</td>
+				    	<td> 
+				    		<select name="year" id="maxpubyear">
+  								   <script>
+  											var myDate = new Date();
+  											var year = myDate.getFullYear();
+  											for(var i = 1900; i < year+1; i++){
+	  											document.write('<option value="'+i+'">'+i+'</option>');
+  											}
+  									</script>
+							</select>
+						</td>
+						<td>	
+				    		<button type="button" id = "maxpubquery" onclick = "maxpub()">Query</button>
+				    	</td>
+				    </tr>
+					<tr>
+						<td colspan = "4"><h4 style="text-align:center;">Maximum Projects</h4></td>
+					</tr>
+					<tr>
+						<td colspan = "3">
+							6.
+						</td>
+				    	<td>
+				    		<button type="button" id = "maxprojquery" onclick = "maxproj()">Query</button>
+				    	</td>
+				    </tr>
+					<tr>
+						<td colspan = "4"><h4 style="text-align:center;">User Query</h4></td>
+					</tr>
+					<tr>
+						<td>
+							7.
+						</td>
+						<td colspan = "2">
+							<textarea rows="4" cols="100" id = "usr"></textarea>
+						</td>
+				    	<td>
+				    		<button type="button" id = "usrquery" onclick = "userquery()">Query</button>
+				    	</td>
+				    </tr>
+				</table>
+
+			</div>
+			<div style = "position:absolute;left:900px;height:900px;width:600px;">
+				<h2 style = "text-align:center;">Results</h3>
+				<div id = "result"> </div>
+			<div>
+		</div>
+		<script>
+			var node = document.getElementById("query");
+			var xhttp = new XMLHttpRequest();
+
+			//action taken on getting the reply from the server.
+
+  			xhttp.onreadystatechange = function() {
+  				document.getElementById("result").innerHTML = this.responseText;
+    			if (this.readyState == 4 && this.status == 200) {}
+     					
+  			};
+
+  			// Action for responsibility query.
+
+			function getres(){
+				var string = "SELECT name FROM responsibility WHERE lower(reponsibility) like '%" + document.getElementById("res").value.toLowerCase() + "%';";
+				node.innerHTML = string;
+	  			xhttp.open("POST", "mydb.php?q=" + string , true);
+	  			xhttp.send();
+			}
+
+			// Action for award query.
+
+			function getawa(){
+				var string = "SELECT name FROM awards WHERE lower(awards) like '%" + document.getElementById("awa").value.toLowerCase() + "%';";
+				node.innerHTML = string;
+	  			xhttp.open("POST", "mydb.php?q=" + string , true);
+	  			xhttp.send();
+
+			}
+
+			//Action for publication Query.
+
+			function getpub(){
+				var string = "SELECT title FROM pub WHERE lower(name) like '%" + document.getElementById("pubname").value.toLowerCase() + "%' and year like '" + document.getElementById("pubyear").value + "%';";
+				node.innerHTML = string;
+	  			xhttp.open("POST", "mydb.php?q=" + string , true);
+	  			xhttp.send();
+			}
+
+			//Action for max. Phd student query.
+
+			function maxphd(){
+				var string = "SELECT name, num FROM (SELECT name, COUNT(student) AS num FROM phd GROUP BY name) AS S WHERE num >= ALL (SELECT num FROM  (SELECT name, COUNT(student) AS num FROM phd GROUP BY name) AS T);";
+				node.innerHTML = string;
+	  			xhttp.open("POST", "mydb.php?q=" + string , true);
+	  			xhttp.send();
+			}
+
+			// Action for max. publication query.
+
+			function maxpub(){
+				var string = "SELECT name, num FROM (SELECT name, COUNT(title) AS num FROM pub WHERE year like '" + document.getElementById("maxpubyear").value.toLowerCase() + "%' GROUP BY name) AS S WHERE num >= ALL (SELECT num FROM (SELECT name, COUNT(title) AS num FROM pub WHERE year like '" + document.getElementById("maxpubyear").value.toLowerCase() + "%' GROUP BY name) AS T);";
+				node.innerHTML = string;
+	  			xhttp.open("POST", "mydb.php?q=" + string , true);
+	  			xhttp.send();
+			}
+
+			//Action for max. project query.
+
+			function maxproj(){
+				var string = "SELECT name, num FROM (SELECT name, COUNT(title) AS num FROM proj GROUP BY name) AS S WHERE num >= ALL (SELECT num FROM (SELECT name, COUNT(title) AS num FROM proj GROUP BY name) T);";
+				node.innerHTML = string;
+	  			xhttp.open("POST", "mydb.php?q=" + string , true);
+	  			xhttp.send();
+			}
+
+			//Action for user query.
+
+			function userquery(){
+				var string = document.getElementById("usr").value;
+				node.innerHTML = string;
+	  			xhttp.open("POST", "mydb.php?q=" + string , true);
+	  			xhttp.send();
+			}
+		</script>
+	</body>
+</html>
